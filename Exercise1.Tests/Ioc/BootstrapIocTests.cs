@@ -12,14 +12,14 @@ using System.Reflection;
 namespace Exercise1.Tests.Bootstrap
 {
 	[TestClass]
-	public class StartupTests
+	public class BootstrapIocTests
 	{
 		[TestMethod]
-		public void _ImplementsBase()
+		public void BootstrapIoc_ImplementsBase()
 			=> Assert.IsInstanceOfType( new BootstrapIoc(), typeof( FunctionsStartup ) );
 
 		[TestMethod]
-		public void _AssemblyRegistration()
+		public void BootstrapIoc_AssemblyRegistration()
 		{
 			var startups = Assembly.GetAssembly( typeof( BootstrapIoc ) ).GetCustomAttributes<FunctionsStartupAttribute>();
 			Assert.IsTrue(
@@ -30,7 +30,7 @@ namespace Exercise1.Tests.Bootstrap
 		}
 
 		[TestMethod]
-		public void _RegistersServices()
+		public void BootstrapIoc_RegistersServices()
 		{
 			var svcs = new ServiceCollection();
 			var mockBuilder = new Mock<IFunctionsHostBuilder>();
