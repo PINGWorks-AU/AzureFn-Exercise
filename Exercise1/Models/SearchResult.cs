@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Exercise1.Models
 {
@@ -17,7 +15,6 @@ namespace Exercise1.Models
 
 		public class CreditInfo
 		{
-			[JsonConverter(typeof(StringEnumConverter))]
 			public Gender Gender { get; set; }
 			public string Name { get; set; }
 			public string Character { get; set; }

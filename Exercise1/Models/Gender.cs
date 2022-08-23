@@ -1,5 +1,9 @@
-﻿namespace Exercise1.Models
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace Exercise1.Models
 {
+	[JsonConverter( typeof( StringEnumConverter ) )]
 	public enum Gender
 	{
 		Unspecified = 0,
