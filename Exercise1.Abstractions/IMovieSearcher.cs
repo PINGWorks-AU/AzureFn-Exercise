@@ -1,4 +1,4 @@
-﻿using Exercise1.Models;
+﻿using Exercise1.Abstractions.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

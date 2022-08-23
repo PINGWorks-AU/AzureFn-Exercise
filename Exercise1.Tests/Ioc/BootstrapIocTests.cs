@@ -1,7 +1,7 @@
 ﻿using Exercise1.Abstractions;
-using Exercise1.Clients;
 using Exercise1.Ioc;
 using Exercise1.Services;
+using Exercise1.TheMovieDb.SDK;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -40,7 +40,7 @@ namespace Exercise1.Tests.Bootstrap
 			b.Configure( mockBuilder.Object );
 
 			// check registrations
-			Assert.IsTrue( svcs.Any( s => s.ServiceType == typeof( IMovieSearcher ) && s.ImplementationType == typeof( TmdbSearchService ) ) );
+			Assert.IsTrue( svcs.Any( s => s.ServiceType == typeof( IMovieSearcher ) && s.ImplementationType == typeof( MovieSearchService ) ) );
 			Assert.IsTrue( svcs.Any( s => s.ServiceType == typeof( IMovieRepository ) && s.ImplementationType == typeof( TmdbClient ) ) );
 		}
 	}

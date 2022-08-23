@@ -1,5 +1,5 @@
 using Exercise1.Abstractions;
-using Exercise1.Models;
+using Exercise1.Abstractions.Models;
 using Exercise1.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Exercise1.Tests
 {
-	[TestClass]
+    [TestClass]
 	public class HttpFunctionTests
 	{
 		private class QueryColl : IQueryCollection

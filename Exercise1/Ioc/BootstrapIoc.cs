@@ -1,5 +1,4 @@
 ﻿using Exercise1.Abstractions;
-using Exercise1.Clients;
 using Exercise1.Services;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,15 +12,9 @@ namespace Exercise1.Ioc
 	{
 		public override void Configure( IFunctionsHostBuilder builder )
 		{
-
 			builder.Services
-						.AddSingleton<IMovieSearcher, TmdbSearchService>()
-						.AddTransient<IMovieRepository,TmdbClient>()
-						.AddHttpClient<IMovieRepository,TmdbClient>(
-							http => {
-								http.BaseAddress = new Uri( "https://api.themoviedb.org" );
-							}
-						);
+						.AddTheMovieDb( "51ed0958e22db09811303e357ee72425" )
+						.AddSingleton<IMovieSearcher, MovieSearchService>();
 		}
 	}
 }

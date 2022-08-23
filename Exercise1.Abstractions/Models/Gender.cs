@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Exercise1.Models
+namespace Exercise1.Abstractions.Models
 {
 	[JsonConverter( typeof( StringEnumConverter ) )]
 	public enum Gender

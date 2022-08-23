@@ -1,12 +1,10 @@
 ﻿using Exercise1.Abstractions;
-using Exercise1.Clients;
-using Exercise1.Models;
+using Exercise1.Abstractions.Models;
 using Exercise1.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +15,7 @@ namespace Exercise1.Tests.Services
 	{
 		[TestMethod]
 		public void SearchService_ImplementsInterface()
-			=> Assert.IsInstanceOfType( new TmdbSearchService( Mock.Of<IMovieRepository>() ), typeof( IMovieSearcher ) );
+			=> Assert.IsInstanceOfType( new MovieSearchService( Mock.Of<IMovieRepository>() ), typeof( IMovieSearcher ) );
 
 		[TestMethod]
 		public async Task SearchService_Search_LazyLoadMoviesAndCache()
@@ -27,7 +25,7 @@ namespace Exercise1.Tests.Services
 				.ReturnsAsync( new[] { new MovieRec() } )
 				.Verifiable();
 
-			var svc = new TmdbSearchService( mockCl.Object );
+			var svc = new MovieSearchService( mockCl.Object );
 			await svc.Search( "" );
 			mockCl.Verify( c => c.GetMoviesFromList(), Times.Once );
 
@@ -39,7 +37,7 @@ namespace Exercise1.Tests.Services
 		[TestMethod]
 		public async Task SearchService_Search_Degenerates()
 		{
-			var svc = new TmdbSearchService( CreateClient().Object );
+			var svc = new MovieSearchService( CreateClient().Object );
 			Assert.AreEqual( Enumerable.Empty<SearchResult>(), await svc.Search( null ) );
 			Assert.AreEqual( Enumerable.Empty<SearchResult>(), await svc.Search( "" ) );
 		}
@@ -52,7 +50,7 @@ namespace Exercise1.Tests.Services
 				.ReturnsAsync( new[] { new MovieCreditsRec { Name = "n", Character = "c", Gender = Gender.Female } } )
 				.Verifiable();
 
-			var svc = new TmdbSearchService( mockCl.Object );
+			var svc = new MovieSearchService( mockCl.Object );
 			var ret = await svc.Search( "potato" );
 
 			Mock.Verify( mockCl );
@@ -71,9 +69,11 @@ namespace Exercise1.Tests.Services
 		[TestMethod]
 		public void SearchResult_Serialization()
 		{
-			var result = new SearchResult {
-							Movie = new() { Id = 1, Title = "a" },
-							Credits = new[] { new SearchResult.CreditInfo { Character = "c", Name = "n", Gender = Gender.Female } } };
+			var result = new SearchResult
+			{
+				Movie = new() { Id = 1, Title = "a" },
+				Credits = new[] { new SearchResult.CreditInfo { Character = "c", Name = "n", Gender = Gender.Female } }
+			};
 
 			var json = JsonConvert.SerializeObject( result, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() } );
 

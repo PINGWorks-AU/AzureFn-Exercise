@@ -1,5 +1,5 @@
 ﻿using Exercise1.Abstractions;
-using Exercise1.Models;
+using Exercise1.Abstractions.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace Exercise1.Services
 {
-	internal class TmdbSearchService : IMovieSearcher
+	internal class MovieSearchService : IMovieSearcher
 	{
-		private readonly IMovieRepository ApiClient;
+		private readonly IMovieRepository MovieDb;
 		private IEnumerable<MovieRec> Movies;
 
-		public TmdbSearchService( IMovieRepository apiClient )
+		public MovieSearchService( IMovieRepository movieDb )
 		{
-			ApiClient = apiClient;
+			MovieDb = movieDb;
 		}
 
 		public async Task<IEnumerable<SearchResult>> Search( string query )
 		{
-			Movies ??= await ApiClient.GetMoviesFromList();
+			Movies ??= await MovieDb.GetMoviesFromList();
 
 			if ( string.IsNullOrEmpty( query ) )
 				return Enumerable.Empty<SearchResult>();
@@ -52,7 +52,7 @@ namespace Exercise1.Services
 			var creditDict = new Dictionary<int, IEnumerable<MovieCreditsRec>>();
 			foreach ( var movieId in resultList.Select( m => m.Id ) )
 			{
-				var credits = await ApiClient.GetCreditsForMovie( movieId );
+				var credits = await MovieDb.GetCreditsForMovie( movieId );
 				creditDict.Add( movieId, credits );
 			}
 

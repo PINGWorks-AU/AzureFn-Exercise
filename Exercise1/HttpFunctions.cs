@@ -1,5 +1,5 @@
 using Exercise1.Abstractions;
-using Exercise1.Models;
+using Exercise1.Abstractions.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
