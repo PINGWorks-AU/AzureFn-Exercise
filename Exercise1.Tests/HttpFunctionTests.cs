@@ -1,3 +1,4 @@
+using Exercise1.Abstractions;
 using Exercise1.Models;
 using Exercise1.Services;
 using Microsoft.AspNetCore.Http;
@@ -56,7 +57,7 @@ namespace Exercise1.Tests
 		[TestMethod]
 		public async Task HttpFunction_Returns400IfMissingQueryString()
 		{
-			var fn = new HttpFunctions( Mock.Of<ISearchService>() );
+			var fn = new HttpFunctions( Mock.Of<IMovieSearcher>() );
 
 			// nothing in query so we get a 400
 			IActionResult ret = await fn.Search( CreateMockRequest( includeQs: false ) );
@@ -70,7 +71,7 @@ namespace Exercise1.Tests
 		[TestMethod]
 		public async Task HttpFunction_SearchesService()
 		{
-			var mockSvc = new Mock<ISearchService>();
+			var mockSvc = new Mock<IMovieSearcher>();
 			mockSvc.Setup( s => s.Search( "search" ) ).ReturnsAsync( new[] { new SearchResult() } ).Verifiable();
 
 			var fn = new HttpFunctions( mockSvc.Object );

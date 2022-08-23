@@ -1,4 +1,5 @@
-﻿using Exercise1.Clients;
+﻿using Exercise1.Abstractions;
+using Exercise1.Clients;
 using Exercise1.Services;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,9 +15,9 @@ namespace Exercise1.Ioc
 		{
 
 			builder.Services
-						.AddSingleton<ISearchService, SearchService>()
-						.AddTransient<ITmdbClient,TmdbClient>()
-						.AddHttpClient<ITmdbClient,TmdbClient>(
+						.AddSingleton<IMovieSearcher, TmdbSearchService>()
+						.AddTransient<IMovieRepository,TmdbClient>()
+						.AddHttpClient<IMovieRepository,TmdbClient>(
 							http => {
 								http.BaseAddress = new Uri( "https://api.themoviedb.org" );
 							}

@@ -1,4 +1,5 @@
-﻿using Exercise1.Clients;
+﻿using Exercise1.Abstractions;
+using Exercise1.Clients;
 using Exercise1.Models;
 using Exercise1.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -16,17 +17,17 @@ namespace Exercise1.Tests.Services
 	{
 		[TestMethod]
 		public void SearchService_ImplementsInterface()
-			=> Assert.IsInstanceOfType( new SearchService( Mock.Of<ITmdbClient>() ), typeof( ISearchService ) );
+			=> Assert.IsInstanceOfType( new TmdbSearchService( Mock.Of<IMovieRepository>() ), typeof( IMovieSearcher ) );
 
 		[TestMethod]
 		public async Task SearchService_Search_LazyLoadMoviesAndCache()
 		{
-			var mockCl = new Mock<ITmdbClient>();
+			var mockCl = new Mock<IMovieRepository>();
 			mockCl.Setup( c => c.GetMoviesFromList() )
 				.ReturnsAsync( new[] { new MovieRec() } )
 				.Verifiable();
 
-			var svc = new SearchService( mockCl.Object );
+			var svc = new TmdbSearchService( mockCl.Object );
 			await svc.Search( "" );
 			mockCl.Verify( c => c.GetMoviesFromList(), Times.Once );
 
@@ -38,7 +39,7 @@ namespace Exercise1.Tests.Services
 		[TestMethod]
 		public async Task SearchService_Search_Degenerates()
 		{
-			var svc = new SearchService( CreateClient().Object );
+			var svc = new TmdbSearchService( CreateClient().Object );
 			Assert.AreEqual( Enumerable.Empty<SearchResult>(), await svc.Search( null ) );
 			Assert.AreEqual( Enumerable.Empty<SearchResult>(), await svc.Search( "" ) );
 		}
@@ -51,7 +52,7 @@ namespace Exercise1.Tests.Services
 				.ReturnsAsync( new[] { new MovieCreditsRec { Name = "n", Character = "c", Gender = Gender.Female } } )
 				.Verifiable();
 
-			var svc = new SearchService( mockCl.Object );
+			var svc = new TmdbSearchService( mockCl.Object );
 			var ret = await svc.Search( "potato" );
 
 			Mock.Verify( mockCl );
@@ -82,9 +83,9 @@ namespace Exercise1.Tests.Services
 			);
 		}
 
-		private Mock<ITmdbClient> CreateClient()
+		private Mock<IMovieRepository> CreateClient()
 		{
-			var mockCl = new Mock<ITmdbClient>();
+			var mockCl = new Mock<IMovieRepository>();
 			mockCl.Setup( c => c.GetMoviesFromList() )
 				.ReturnsAsync( new[] { new MovieRec { Id = 123, Title = "POTato" }, new MovieRec { Title = "tomaTO" } } );
 

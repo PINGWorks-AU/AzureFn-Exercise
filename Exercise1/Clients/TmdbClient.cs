@@ -1,20 +1,19 @@
-﻿using Exercise1.Models;
+﻿using Exercise1.Abstractions;
+using Exercise1.Models;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Exercise1.Clients
 {
-	public class TmdbClient : ITmdbClient
+	internal class TmdbClient : IMovieRepository
 	{
-		private const string ApiKey = "****************";
+		private const string ApiKey = "51ed0958e22db09811303e357ee72425";
 		private readonly HttpClient Http;
 
-		private class ListResult
+		private sealed class ListResult
 		{
 			public IEnumerable<Item> Items { get; set; }
 			public class Item
@@ -23,13 +22,14 @@ namespace Exercise1.Clients
 				public int Id { get; set; }
 			}
 		}
-		private class CreditsResult
+		private sealed class CreditsResult
 		{
 			public IEnumerable<Item> Cast { get; set; }
-			public class Item {
+			public class Item
+			{
 				public string Name { get; set; }
 				public string Character { get; set; }
-				[JsonProperty("known_for_department")]
+				[JsonProperty( "known_for_department" )]
 				public string Dept { get; set; }
 				public Gender Gender { get; set; }
 			}
